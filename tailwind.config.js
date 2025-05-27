@@ -6,6 +6,10 @@ export const content = [
 	"./src/components/**/*.{js,ts,jsx,tsx}",
 ];
 export const theme = {
-	extend: {},
+	extend: {
+		colors: {
+			primary: "#3058A6",
+		},
+	},
 };
 export const plugins = [];
