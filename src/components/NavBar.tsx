@@ -1,105 +1,51 @@
-"use client";
-
+import { getMenu } from "@/lib/shopify";
+import { Menu } from "@/lib/types";
 import Link from "next/link";
-import Logo from "@/assets/logo.svg";
 
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { NavLinks, mobileNavLinks } from "@/constants/data";
+async function NavBar() {
+  const menu = await getMenu("nextjs-app-menu");
+  // console.log(menu)
 
-function NavBar() {
-	const [isOpen, setIsOpen] = useState(false);
-	return (
-		<div className="lg:sticky ">
-			<div className="flex justify-between border rounded-full p-3 items-center">
-				<div className="flex items-center">
-					<div className="flex items-center justify-start">
-						<Logo className="size-10" />
-					</div>
-
-					<Link href="/">
-						<h4 className="font-normal text-lg">logo</h4>
-					</Link>
-				</div>
-				<div className="hidden md:flex justify-center items-center gap-8 ">
-					{NavLinks.map((link) => (
-						<a
-							href={link.href}
-							key={link.title}
-							className="text-sm font-normal hover:font-medium hover:scale-105 hover:underline transition duration-300"
-						>
-							{link.title}
-						</a>
-					))}
-				</div>
-				<Link
-					href="/contact"
-					className="hidden md:flex rounded-full bg-primary text-white p-2 shadow-md px-5 font-semibold text-sm"
-				>
-					Contact
-				</Link>
-				<div className="justify-end flex gap-4 md:hidden">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						className="feather feather-menu "
-						onClick={() => setIsOpen(!isOpen)}
-					>
-						<line
-							x1="3"
-							y1="6"
-							x2="21"
-							y2="6"
-							className={`origin-left transition ${
-								isOpen && "rotate-45 -translate-y-1"
-							}`}
-						></line>
-						<line
-							x1="3"
-							y1="12"
-							x2="21"
-							y2="12"
-							className={`transition ${isOpen && "opacity-0"}`}
-						></line>
-						<line
-							x1="3"
-							y1="18"
-							x2="21"
-							y2="18"
-							className={`transition origin-left ${
-								isOpen && "-rotate-45 translate-y-1"
-							}`}
-						></line>
-					</svg>
-				</div>
-			</div>
-			<AnimatePresence>
-				{isOpen && (
-					<motion.div
-						initial={{ height: 0 }}
-						animate={{ height: "auto" }}
-						exit={{ height: 0 }}
-						className="overflow-hidden"
-					>
-						<div className="flex flex-col items-center gap-4 py-4">
-							{mobileNavLinks.map((link) => (
-								<a key={link.href} href={link.href} className="">
-									{link.title}
-								</a>
-							))}
-						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
+  return (
+    <nav className="flex items-center justify-between p-4 lg:px-6">
+      <div className="block flex-none md:hidden">{/* <MobileMenu/> */}</div>
+      <div className="flex w-full items-center">
+        <div className="flex w-full md:w-1/3">
+          <Link
+            href={"/"}
+            prefetch={true}
+            className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
+          >
+            {/* <Logo/> */}
+            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
+              {/* {SITE_NAME} */}
+            </div>
+          </Link>
+          {menu.length > 0 ? (
+            <ul className="hidden gap-6 text-sm md:flex md:items-center">
+              {menu.map((item: Menu) => (
+                <li key={item.title}>
+                  <Link
+                    href={item.path}
+                    prefetch={true}
+                    className="text-gray-600 underline-offset-4 hover:text-black hover:underline transition"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+		<div className="hidden justify-center md:flex md:w-1/3">
+			{/* <Search/> */}
 		</div>
-	);
+		<div className="flex justify-end md:w-1/3">
+			{/* <CartModal/> */}
+		</div>
+      </div>
+    </nav>
+  );
 }
 
 export default NavBar;
