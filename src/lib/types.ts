@@ -16,3 +16,5 @@ export type ShopifyMenuOperation = {
     handle: string;
   };
 };
+
+export type Product = Omit<ShopifyProduct, "variants" | "images"> & {}

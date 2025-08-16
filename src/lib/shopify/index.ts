@@ -73,7 +73,6 @@ variables: {
       handle,
     },
   });
-  console.log("Raw : ",res?.body?.data?.menu?.items)
 
   return (
     res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
@@ -84,4 +83,9 @@ variables: {
         .replace("/pages", ""),
     })) || []
   );
+}
+
+export async function getProducts({query, reverse, sortKey} : {query : string, reverse : boolean, sortKey : string}) {
+
+
 }
